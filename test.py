@@ -68,7 +68,7 @@ scrollbar.config(command=match_listbox.yview)
 
 
 # Match details panel
-details_frame = tk.Frame(pane, bg=colors['primary'], fg=colors['white'])
+details_frame = tk.Frame(pane, bg=colors["primary"])
 pane.add(details_frame)
 
 teams_label = ttk.Label(details_frame, text="Team names go here")
