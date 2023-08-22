@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, Listbox, Scrollbar, PanedWindow
+import tkinter.font as tkFont
 from PIL import Image, ImageTk
 import functions
 
@@ -18,8 +19,14 @@ def on_match_select(event):
 
 
 root = tk.Tk()
-root.title("Match Application")
+root.title("NFL BETS admin only desktop app ")
 root.configure(bg=colors["primary"])
+root.option_add('*Font', 'MyriadPro 14')
+
+
+custom_font = ('Myriad Pro', 20)
+
+
 
 # import file image 
 
@@ -37,20 +44,22 @@ resized_image = raw_image.resize((desired_width, desired_height))
 logo_image = ImageTk.PhotoImage(resized_image)
 
 # Display the image in a label
-label = tk.Label(root, image=logo_image, background=colors['primary'], foreground=colors['white'])
-label.pack()
+horizontal_frame = tk.Frame(root, bg=colors['primary'])
+horizontal_frame.pack(pady=10)
 
-username_label = ttk.Label(root, text="Welcome to the admin app")
-username_label.pack(pady=10)
+# Display the image in a label, inside the horizontal frame.
+logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
+logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
 
-# test
+# Display the text label, also inside the horizontal frame.
+username_label = ttk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
+username_label.pack(side=tk.LEFT, padx=10)
 
 
 # Main Window
 pane = PanedWindow(root, orient=tk.HORIZONTAL)  # Change to HORIZONTAL
 pane.pack(fill=tk.BOTH, expand=1)
 
-# Matches list
 # Matches list
 matches_frame = tk.Frame(pane)
 pane.add(matches_frame)
@@ -60,21 +69,26 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
 
 # Assuming you want to show about 10 items at once, and setting the font size to make each item approx. 50px in height.
 match_listbox = Listbox(matches_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=20, height=10, font=("Arial", 20))
+                        width=20, height=10, font=("Myriad pro", 14))
 match_listbox.bind('<<ListboxSelect>>', on_match_select)
 match_listbox.pack(fill=tk.BOTH, expand=1)
 
-scrollbar.config(command=match_listbox.yview)
+scrollbar.config(command=match_listbox.yview, bg=colors["primary"])
+
+
 
 
 # Match details panel
-details_frame = tk.Frame(pane, bg=colors['primary'], fg=colors['white'])
+details_frame = tk.Frame(pane, bg=colors['primary'])
 pane.add(details_frame)
 
-teams_label = ttk.Label(details_frame, text="Team names go here")
+# Set a minimum width of 500 for the details_frame
+pane.paneconfigure(details_frame, minsize=500)
+
+teams_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
 teams_label.pack(pady=5)
 
-time_label = ttk.Label(details_frame, text="Time info goes here")
+time_label = ttk.Label(details_frame, text="Time info goes here", background=colors["primary"], foreground=colors["white"],)
 time_label.pack(pady=5)
 
 # Input for placing comments
@@ -86,6 +100,14 @@ close_button.pack(pady=10)
 
 comment_button = ttk.Button(details_frame, text="Add Comment", command=functions.add_comment)
 comment_button.pack(pady=10)
+
+
+
+## POPULATE Windows
+
+matches = functions.fetch_matches()
+for match in matches:
+    match_listbox.insert(tk.END, match["team_names"])
 
 
 
