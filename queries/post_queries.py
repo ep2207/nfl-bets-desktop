@@ -1,3 +1,4 @@
+from tkinter import messagebox
 import requests
 import json
 from functions import sanitizeInput
@@ -35,7 +36,8 @@ def postCommentary(match_id, commentary):
     
     print (response.status_code)
     if response.status_code == 200:
-        
+        messagebox.showwarning("Success", "Commentary posted! swap matches to see your comment appear.")
+
         print(response.json())
         return response.json()  # assuming the server responds with JSON data
     else:
@@ -43,10 +45,10 @@ def postCommentary(match_id, commentary):
         return None
     
 
-def closeMatch():
+def closeMatch(bets,matchEnd):
 
     data={"unit-code":"khlnjmkn-jbnkz-miff-898f"}
-    url = "https://nflbets-51ac322b191f.herokuapp.com/matches-d"
+    url = "https://nflbets-51ac322b191f.herokuapp.com/close-match-d"
 
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, data=json.dumps(data), headers=headers, verify=False)

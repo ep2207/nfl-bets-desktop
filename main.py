@@ -88,9 +88,13 @@ def close_match():
             messagebox.showwarning("Warning", "No match is selected! First select a match")
             return
 
+        #is the match live? 
       
-        ##close
-        ## calculate 
+            ##close change the time in match-end 
+                # match-id   match-end
+            ## loop all bets calculate   
+            # bet-id  bet-result 
+            # wrap in a json
         ## send 
         ## refresh
         close=0

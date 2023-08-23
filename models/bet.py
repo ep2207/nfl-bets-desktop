@@ -1,3 +1,6 @@
+import datetime
+
+
 class Bet:
     def __init__(self, data):
         self.bet_id = data['bet_id']
@@ -25,3 +28,12 @@ def separate_bets_by_team(match):
 
 def total_bet_amount(bets):
     return sum(bet.bet_amount for bet in bets)
+
+     
+def calculate_gain(self, visiting_team_quote, receiving_team_quote):
+    if self.team_bet_on == "visiting_team":
+        odds = receiving_team_quote / visiting_team_quote
+    else:
+        odds = visiting_team_quote / receiving_team_quote
+    return self.bet_amount * odds
+

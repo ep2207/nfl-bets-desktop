@@ -1,5 +1,7 @@
+import datetime
 from queries.post_queries import getMatches
 from models.bet import Bet
+from datetime import datetime
 
 class Match:
     def __init__(self, data):
@@ -25,7 +27,18 @@ class Match:
 
     def __str__(self):
         return f"{self.match_date} Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name}"
+
+    def is_live(self):
+        # Assuming match_date, match_kickoff, and match_end are in the format 'YYYY-MM-DD HH:MM'
+        match_date = datetime.strptime(self.match_date, '%Y-%m-%d').date()
+        kickoff_time = datetime.strptime(f"{self.match_date} {self.match_kickoff}", '%Y-%m-%d %H:%M')
+        end_time = datetime.strptime(f"{self.match_date} {self.match_end}", '%Y-%m-%d %H:%M')
+        current_time = datetime.now()
+
+        return kickoff_time <= current_time <= end_time and match_date == current_time.date()
+
 listOfMatches = []
+
 
 def requestMatches():
     global listOfMatches
