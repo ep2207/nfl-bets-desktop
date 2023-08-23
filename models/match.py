@@ -1,4 +1,4 @@
-from queries.get_queries import getMatches
+from queries.post_queries import getMatches
 from models.bet import Bet
 
 class Match:

@@ -59,6 +59,15 @@ def on_match_select(event):
     
     bets_rec_sum_label.config(text = f"sum of bets on {selected_match.receiving_team_name}: {total_bet_amount(receiving_team_bets)}  $") 
 
+    
+    commentaries_listbox.delete(0, tk.END)
+    for commentary in selected_match.match_commentaries:
+        commentaries_listbox.insert(tk.END, commentary)
+
+
+
+
+
 root = tk.Tk()
 root.title("NFL BETS admin only desktop app ")
 root.configure(bg=colors["primary"])
@@ -98,7 +107,7 @@ username_label.pack(side=tk.LEFT, padx=10)
 
 
 # Main Window
-pane = PanedWindow(root, orient=tk.HORIZONTAL)  # Change to HORIZONTAL
+pane = PanedWindow(root, orient=tk.HORIZONTAL, height=1000)  # Change to HORIZONTAL
 pane.pack(fill=tk.BOTH, expand=1)
 
 # Matches list
@@ -140,6 +149,10 @@ receiving_team_label.pack(pady=5)
 time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
 time_label.pack(pady=5)
 
+
+close_button = ttk.Button(details_frame, text="Close Match", command=functions.close_match)
+close_button.pack(pady=10)
+
 score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
 score_label.pack(pady=5)
 
@@ -147,7 +160,7 @@ bets_vis_list_label = ttk.Label(details_frame, text="list of bets for visiting t
 bets_vis_list_label.pack(pady=5)
 
 visiting_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=70, height=6, font=("Myriad pro", 10))
+                        width=70, height=3, font=("Myriad pro", 10))
 visiting_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
 bets_vis_sum_label = ttk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
@@ -157,21 +170,23 @@ bets_rec_list_label = ttk.Label(details_frame, text="list of bets for visiting t
 bets_rec_list_label.pack(pady=5)
 
 receiving_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=70, height=6, font=("Myriad pro", 10))
+                        width=70, height=3, font=("Myriad pro", 10))
 receiving_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
 bets_rec_sum_label = ttk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_rec_sum_label.pack(pady=5)
 
 # Input for placing comments
-comment_entry = ttk.Entry(details_frame)
+comment_entry = ttk.Entry(details_frame, width=70, foreground=colors["primary"],font=("Myriad pro",10))
 comment_entry.pack(pady=10)
-
-close_button = ttk.Button(details_frame, text="Close Match", command=functions.close_match)
-close_button.pack(pady=10)
 
 comment_button = ttk.Button(details_frame, text="Add Comment", command=functions.add_comment)
 comment_button.pack(pady=10)
+
+
+commentaries_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
+                        width=30, height=3, font=("Myriad pro", 10))
+commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 
 
