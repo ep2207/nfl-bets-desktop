@@ -1,3 +1,5 @@
+import datetime
+import json
 import tkinter as tk
 from tkinter import ttk, Listbox, Scrollbar, PanedWindow
 from tkinter import messagebox
@@ -5,9 +7,10 @@ import tkinter.font as tkFont
 from PIL import Image, ImageTk
 from queries.post_queries import postCommentary
 from models.match import allMatches 
-from models.bet import separate_bets_by_team,total_bet_amount
+from models.bet import  separate_bets_by_team,total_bet_amount
+from functions import getClosureData
 import time
-from 
+
 
 colors = {
     "primary": "#013369",
@@ -89,36 +92,9 @@ def close_match():
             messagebox.showwarning("Warning", "No match is selected! First select a match")
             return
 
-        # Check if the match is live 
-        if selected_match.is_live():
-            # Set the match end-time to the current time
-            current_time = datetime.now().strftime('%I:%M %p')  # Get the current time in 12-hour format with AM/PM
-            selected_match.match_end = current_time  # Update the match end time
+        jsonData = getClosureData(selected_match)
 
-            # Calculate bet results and populate the bets list
-            bets_list = []
-            for bet in selected_match.bets:
-                bet_result = calculate_gain(bet,selected_match.visiting_team_quote, selected_match.receiving_team_quote) 
-                bets_list.append({
-                    "bet-id": bet.bet_id,
-                    "bet-result": bet_result
-                })
-
-            # Construct the JSON
-            match_data = {
-                "match-id": str(selected_match.match_id),
-                "match-end": current_time,
-                "bets": bets_list
-            }
-
-            json_data = json.dumps(match_data)
-            return json_data
-
-                # match-id   match-end
-            ## loop all bets calculate   
-            # bet-id  bet-result 
-            # wrap in a json
-        ## send 
+        
         ## refresh
         close=0
 
