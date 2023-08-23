@@ -13,14 +13,6 @@ def sanitizeInput(input_text):
     return sanitized_text
 
 
-
-
-
-def fetch_matches():
-    return [{"team_names": "TeamA vs TeamB"}]
-
-
-
 def getClosureData(selected_match):
 
     # Check if the match is live 
@@ -47,9 +39,4 @@ def getClosureData(selected_match):
 
         json_data = json.dumps(match_data)
         return json_data
-
-
-
-def add_comment():
-    print("Adding comment")
 
