@@ -16,15 +16,24 @@ colors = {
 
 
 def on_match_select(event):
-    selected_index = match_listbox.curselection()[0] # Get selected index
-    selected_match = matches[selected_index] # Get the Match object based on index
+    selected_index = match_listbox.curselection()[0] # 
+    selected_match = matches[selected_index]
 
-    # Now, you can use the attributes of selected_match to display details
     visiting_team_label.config(text=selected_match.visiting_team_name)
+
     # You can do similar updates for other labels/details you wish to show
     receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
-    # Add any other details as needed
+    
+    # Clear the current items in bets_listbox
+    bets_listbox.delete(0, tk.END)
+    
+    # Add bets from the selected match to bets_listbox
+    if selected_match.bets:
+        for bet in selected_match.bets:
+            bets_listbox.insert(tk.END, str(bet))  
+    else:
+        bets_listbox.insert(tk.END, "No bets available for the selected match.")
 
 
 
@@ -96,16 +105,27 @@ pane.add(details_frame)
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
 
-visiting_team_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
+visiting_team_label = ttk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["white"],)
 visiting_team_label.pack(pady=5)
 
-receiving_team_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
-receiving_team_label.pack(pady=5)
 
+vs_label = ttk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["white"],)
+vs_label.pack(pady=5)
+
+receiving_team_label = ttk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["white"],)
+receiving_team_label.pack(pady=5)
 
 
 time_label = ttk.Label(details_frame, text="Time info goes here", background=colors["primary"], foreground=colors["white"],)
 time_label.pack(pady=5)
+
+
+bets_list_label = ttk.Label(details_frame, text="list of bets", background=colors["primary"], foreground=colors["white"],)
+bets_list_label.pack(pady=5)
+
+bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
+                        width=70, height=10, font=("Myriad pro", 10))
+bets_listbox.pack(fill=tk.BOTH, expand=1)
 
 # Input for placing comments
 comment_entry = ttk.Entry(details_frame)

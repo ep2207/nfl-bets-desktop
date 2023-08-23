@@ -1,4 +1,5 @@
 from queries.get_queries import getMatches
+from models.bet import Bet
 
 class Match:
     def __init__(self, data):
@@ -12,12 +13,18 @@ class Match:
         self.match_end = data['match-end']
         self.score = data['score']
         self.match_weather_forecast = data['match-weather-forecast']
-        self.bets = data['bets']
         self.match_commentaries = data['match-commentaries']
+        
+        #handle bets in case of empty data 
+        bets_data = data.get('bets')
+        if bets_data is None:
+            self.bets = []
+        else:
+            self.bets = [Bet(bet_data) for bet_data in bets_data]
+
 
     def __str__(self):
-        return f"Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name} on {self.match_date}"
-
+        return f"{self.match_date} Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name}"
 listOfMatches = []
 
 def requestMatches():
