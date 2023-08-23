@@ -17,7 +17,7 @@ def getMatches():
     if response.status_code == 200:
         
         print(response.json())
-        return response.json()  # assuming the server responds with JSON data
+        return response.json()
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
         return None
@@ -39,15 +39,16 @@ def postCommentary(match_id, commentary):
         messagebox.showwarning("Success", "Commentary posted! swap matches to see your comment appear.")
 
         print(response.json())
-        return response.json()  # assuming the server responds with JSON data
+        return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
         return None
     
 
-def closeMatch(bets,matchEnd):
+def closeMatch(matchAndBetsData):
 
     data={"unit-code":"khlnjmkn-jbnkz-miff-898f"}
+    data.update(matchAndBetsData) #append data 
     url = "https://nflbets-51ac322b191f.herokuapp.com/close-match-d"
 
     headers = {"Content-Type": "application/json"}
@@ -58,7 +59,7 @@ def closeMatch(bets,matchEnd):
     if response.status_code == 200:
         
         print(response.json())
-        return response.json()  # assuming the server responds with JSON data
+        return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
         return None
