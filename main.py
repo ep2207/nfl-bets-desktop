@@ -117,7 +117,7 @@ def add_commentary():
             return
         
         else:
-            post_queries(selected_match.match_id,commentary_text)
+            postCommentary(selected_match.match_id,commentary_text)
             time.sleep(3) # wait for server interaction
             matches =allMatches(); #refresh matches 
         
