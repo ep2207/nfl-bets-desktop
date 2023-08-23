@@ -3,6 +3,7 @@ from tkinter import ttk, Listbox, Scrollbar, PanedWindow
 import tkinter.font as tkFont
 from PIL import Image, ImageTk
 import functions
+from models.match import allMatches 
 
 colors = {
     "primary": "#013369",
@@ -14,8 +15,15 @@ colors = {
 }
 
 def on_match_select(event):
-    selected_match = match_listbox.get(match_listbox.curselection())
-    print(selected_match)
+    selected_index = match_listbox.curselection()[0] # Get selected index
+    selected_match = matches[selected_index] # Get the Match object based on index
+
+    # Now, you can use the attributes of selected_match to display details
+    visiting_team_label.config(text=selected_match.visiting_team_name)
+    # You can do similar updates for other labels/details you wish to show
+    teams_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
+    time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
+    # Add any other details as needed
 
 
 root = tk.Tk()
@@ -69,7 +77,7 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.BOTH)
 
 # Assuming you want to show about 10 items at once, and setting the font size to make each item approx. 50px in height.
 match_listbox = Listbox(matches_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=20, height=10, font=("Myriad pro", 14))
+                        width=70, height=10, font=("Myriad pro", 10))
 match_listbox.bind('<<ListboxSelect>>', on_match_select)
 match_listbox.pack(fill=tk.BOTH, expand=1)
 
@@ -105,9 +113,9 @@ comment_button.pack(pady=10)
 
 ## POPULATE Windows
 
-matches = functions.fetch_matches()
+matches = allMatches()
 for match in matches:
-    match_listbox.insert(tk.END, match["team_names"])
+    match_listbox.insert(tk.END, str(match))
 
 
 

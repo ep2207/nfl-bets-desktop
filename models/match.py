@@ -1,26 +1,24 @@
-from get_queries import getMatches
-
+from queries.get_queries import getMatches
 
 class Match:
-    def __init__(self, match_id, visiting_team_name, visiting_team_quote, receiving_team_name,
-                 receiving_team_quote, match_date, match_kickoff, match_end, score, match_weather_forecast, bets, match_commentaries):
-        self.match_id = match_id
-        self.visiting_team_name = visiting_team_name
-        self.visiting_team_quote = visiting_team_quote
-        self.receiving_team_name = receiving_team_name
-        self.receiving_team_quote = receiving_team_quote
-        self.match_date = match_date
-        self.match_kickoff = match_kickoff
-        self.match_end = match_end
-        self.score = score
-        self.match_weather_forecast = match_weather_forecast
-        self.bets = bets
-        self.match_commentaries = match_commentaries
+    def __init__(self, data):
+        self.match_id = data['match-id']
+        self.visiting_team_name = data['visiting-team-name']
+        self.visiting_team_quote = data['visiting-team-quote']
+        self.receiving_team_name = data['receiving-team-name']
+        self.receiving_team_quote = data['receiving-team-quote']
+        self.match_date = data['match-date']
+        self.match_kickoff = data['match-kickoff']
+        self.match_end = data['match-end']
+        self.score = data['score']
+        self.match_weather_forecast = data['match-weather-forecast']
+        self.bets = data['bets']
+        self.match_commentaries = data['match-commentaries']
 
     def __str__(self):
         return f"Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name} on {self.match_date}"
 
-listOfMatches =[]
+listOfMatches = []
 
 def requestMatches():
     global listOfMatches
@@ -28,7 +26,7 @@ def requestMatches():
     # Clear the current data
     listOfMatches.clear()
     # Extend the global list with new matches
-    listOfMatches.extend([Match(**match) for match in data])
+    listOfMatches.extend([Match(match) for match in data])
 
 def allMatches():
     global listOfMatches
@@ -38,3 +36,4 @@ def allMatches():
 
 # To get and refresh the data, simply call allMatches
 matches = allMatches()
+
