@@ -83,7 +83,8 @@ def get_selected_match():
 
 def close_match():
     response = messagebox.askyesno("Confirmation to close a match", "Are you sure you want to close this match?")
-    
+    global matches
+
     if response:
 
         selected_match = get_selected_match()
@@ -94,9 +95,8 @@ def close_match():
 
         jsonData = getClosureData(selected_match)
 
-        
-        ## refresh
-        close=0
+        time.sleep(3) # wait for server interaction
+        matches =allMatches(); #refresh matches 
 
 
 def add_commentary():
