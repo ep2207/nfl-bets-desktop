@@ -14,6 +14,7 @@ colors = {
     "error": "#FF0000"
 }
 
+
 def on_match_select(event):
     selected_index = match_listbox.curselection()[0] # Get selected index
     selected_match = matches[selected_index] # Get the Match object based on index
@@ -21,9 +22,11 @@ def on_match_select(event):
     # Now, you can use the attributes of selected_match to display details
     visiting_team_label.config(text=selected_match.visiting_team_name)
     # You can do similar updates for other labels/details you wish to show
-    teams_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
+    receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
     # Add any other details as needed
+
+
 
 
 root = tk.Tk()
@@ -93,8 +96,13 @@ pane.add(details_frame)
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
 
-teams_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
-teams_label.pack(pady=5)
+visiting_team_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
+visiting_team_label.pack(pady=5)
+
+receiving_team_label = ttk.Label(details_frame, text="Team names go here", background=colors["primary"], foreground=colors["white"],)
+receiving_team_label.pack(pady=5)
+
+
 
 time_label = ttk.Label(details_frame, text="Time info goes here", background=colors["primary"], foreground=colors["white"],)
 time_label.pack(pady=5)
