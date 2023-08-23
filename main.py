@@ -4,7 +4,8 @@ import tkinter.font as tkFont
 from PIL import Image, ImageTk
 import functions
 from models.match import allMatches 
-
+from models.bet import separate_bets_by_team,total_bet_amount
+ 
 colors = {
     "primary": "#013369",
     "secondary": "#FFD700",
@@ -24,19 +25,39 @@ def on_match_select(event):
     # You can do similar updates for other labels/details you wish to show
     receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
+
+    score_label.config(text = f"current score: {selected_match.score}")
     
+    bets_vis_list_label.config(text = f"bets on: {selected_match.visiting_team_name}")
+    bets_rec_list_label.config(text = f"bets on: {selected_match.receiving_team_name}")
+
+    
+    ### populating list logic 
+
     # Clear the current items in bets_listbox
-    bets_listbox.delete(0, tk.END)
+    visiting_team_bets_listbox.delete(0, tk.END)
+    receiving_team_bets_listbox.delete(0, tk.END)
+
+    #split the bets in two 
+    visiting_team_bets,receiving_team_bets = separate_bets_by_team(selected_match)
     
     # Add bets from the selected match to bets_listbox
-    if selected_match.bets:
-        for bet in selected_match.bets:
-            bets_listbox.insert(tk.END, str(bet))  
+    if visiting_team_bets:
+        for bet in visiting_team_bets:
+            visiting_team_bets_listbox.insert(tk.END, str(bet))  
     else:
-        bets_listbox.insert(tk.END, "No bets available for the selected match.")
+        visiting_team_bets_listbox.insert(tk.END, "No bets available for the selected match.")
 
-
-
+    bets_vis_sum_label.config(text = f"sum of bets on {selected_match.visiting_team_name}: {total_bet_amount(visiting_team_bets)}  $") 
+    
+    # Add bets from the selected match to bets_listbox
+    if receiving_team_bets:
+        for bet in selected_match.bets:
+            receiving_team_bets_listbox.insert(tk.END, str(bet))  
+    else:
+        receiving_team_bets_listbox.insert(tk.END, "No bets available for the selected match.")
+    
+    bets_rec_sum_label.config(text = f"sum of bets on {selected_match.receiving_team_name}: {total_bet_amount(receiving_team_bets)}  $") 
 
 root = tk.Tk()
 root.title("NFL BETS admin only desktop app ")
@@ -105,27 +126,42 @@ pane.add(details_frame)
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
 
-visiting_team_label = ttk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["white"],)
+visiting_team_label = ttk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["secondary"],)
 visiting_team_label.pack(pady=5)
 
 
-vs_label = ttk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["white"],)
+vs_label = ttk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["secondary"],)
 vs_label.pack(pady=5)
 
-receiving_team_label = ttk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["white"],)
+receiving_team_label = ttk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["secondary"],)
 receiving_team_label.pack(pady=5)
 
 
-time_label = ttk.Label(details_frame, text="Time info goes here", background=colors["primary"], foreground=colors["white"],)
+time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
 time_label.pack(pady=5)
 
+score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
+score_label.pack(pady=5)
 
-bets_list_label = ttk.Label(details_frame, text="list of bets", background=colors["primary"], foreground=colors["white"],)
-bets_list_label.pack(pady=5)
+bets_vis_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_vis_list_label.pack(pady=5)
 
-bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=70, height=10, font=("Myriad pro", 10))
-bets_listbox.pack(fill=tk.BOTH, expand=1)
+visiting_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
+                        width=70, height=6, font=("Myriad pro", 10))
+visiting_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
+
+bets_vis_sum_label = ttk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_vis_sum_label.pack(pady=5)
+
+bets_rec_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_rec_list_label.pack(pady=5)
+
+receiving_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
+                        width=70, height=6, font=("Myriad pro", 10))
+receiving_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
+
+bets_rec_sum_label = ttk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_rec_sum_label.pack(pady=5)
 
 # Input for placing comments
 comment_entry = ttk.Entry(details_frame)
