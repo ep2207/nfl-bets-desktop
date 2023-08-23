@@ -1,11 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, Listbox, Scrollbar, PanedWindow
+from tkinter import messagebox
 import tkinter.font as tkFont
 from PIL import Image, ImageTk
-import functions
+from queries.post_queries import postCommentary
 from models.match import allMatches 
 from models.bet import separate_bets_by_team,total_bet_amount
- 
+import time
+
 colors = {
     "primary": "#013369",
     "secondary": "#FFD700",
@@ -64,6 +66,61 @@ def on_match_select(event):
     for commentary in selected_match.match_commentaries:
         commentaries_listbox.insert(tk.END, commentary)
 
+def get_selected_match():
+    selected_index = match_listbox.curselection()
+    
+    if not selected_index:  # If no match is selected, this is an empty tuple
+        return None
+
+    selected_match = matches[selected_index[0]]
+    return selected_match
+
+
+
+def close_match():
+    response = messagebox.askyesno("Confirmation to close a match", "Are you sure you want to close this match?")
+    
+    if response:
+        ## verify a match is selected
+        selected_match = get_selected_match()
+        
+        if not selected_match:
+            messagebox.showwarning("Warning", "No match is selected! First select a match")
+            return
+
+      
+        ##close
+        ## calculate 
+        ## send 
+        ## refresh
+        close=0
+
+
+def add_commentary():
+    response = messagebox.askyesno("Confirmation to a commentary", "Are you sure you want to post this commentary?")
+    global matches
+
+    if response:
+
+        ## verify a match is selected
+        selected_match = get_selected_match()
+        
+        if not selected_match:
+            messagebox.showwarning("Warning", "No match is selected! First select a match")
+            return
+
+         # Retrieve commentary from Entry widget
+        commentary_text = comment_entry.get()
+
+        if not commentary_text:
+            messagebox.showwarning("Warning", "Please enter a commentary before posting!")
+            return
+        
+        else:
+            post_queries(selected_match.match_id,commentary_text)
+            time.sleep(3) # wait for server interaction
+            matches =allMatches(); #refresh matches 
+        
 
 
 
@@ -150,7 +207,7 @@ time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["pri
 time_label.pack(pady=5)
 
 
-close_button = ttk.Button(details_frame, text="Close Match", command=functions.close_match)
+close_button = ttk.Button(details_frame, text="Close Match", command=close_match)
 close_button.pack(pady=10)
 
 score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
@@ -180,7 +237,7 @@ bets_rec_sum_label.pack(pady=5)
 comment_entry = ttk.Entry(details_frame, width=70, foreground=colors["primary"],font=("Myriad pro",10))
 comment_entry.pack(pady=10)
 
-comment_button = ttk.Button(details_frame, text="Add Comment", command=functions.add_comment)
+comment_button = ttk.Button(details_frame, text="Add Comment", command=add_commentary)
 comment_button.pack(pady=10)
 
 
@@ -191,7 +248,6 @@ commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 
 ## POPULATE Windows
-
 matches = allMatches()
 for match in matches:
     match_listbox.insert(tk.END, str(match))
