@@ -31,8 +31,9 @@ class Match:
     def is_live(self):
         # Assuming match_date, match_kickoff, and match_end are in the format 'YYYY-MM-DD HH:MM'
         match_date = datetime.strptime(self.match_date, '%Y-%m-%d').date()
-        kickoff_time = datetime.strptime(f"{self.match_date} {self.match_kickoff}", '%Y-%m-%d %H:%M')
-        end_time = datetime.strptime(f"{self.match_date} {self.match_end}", '%Y-%m-%d %H:%M')
+        kickoff_time = datetime.strptime(f"{self.match_date} {self.match_kickoff}", '%Y-%m-%d %H:%M:%S')
+        end_time = datetime.strptime(f"{self.match_date} {self.match_end}", '%Y-%m-%d %H:%M:%S')
+
         current_time = datetime.now()
 
         return kickoff_time <= current_time <= end_time and match_date == current_time.date()

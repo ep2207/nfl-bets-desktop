@@ -5,7 +5,7 @@ from tkinter import ttk, Listbox, Scrollbar, PanedWindow
 from tkinter import messagebox
 import tkinter.font as tkFont
 from PIL import Image, ImageTk
-from queries.post_queries import postCommentary
+from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
 from functions import getClosureData
@@ -93,7 +93,7 @@ def close_match():
             messagebox.showwarning("Warning", "No match is selected! First select a match")
             return
 
-        jsonData = getClosureData(selected_match)
+        closeMatch(getClosureData(selected_match))
 
         time.sleep(3) # wait for server interaction
         matches =allMatches(); #refresh matches 

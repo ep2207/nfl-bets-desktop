@@ -1,5 +1,7 @@
 # Create styles for ttk widgets
-import datetime
+import datetime as dt
+
+
 import json
 import re
 
@@ -14,11 +16,10 @@ def sanitizeInput(input_text):
 
 
 def getClosureData(selected_match):
-
     # Check if the match is live 
     if selected_match.is_live():
         # Set the match end-time to the current time
-        current_time = datetime.now().strftime('%I:%M %p')  # Get the current time in 12-hour format with AM/PM
+        current_time = dt.datetime.now().strftime('%I:%M:%S %p')
         selected_match.match_end = current_time  # Update the match end time
 
         # Calculate bet results and populate the bets list
@@ -30,13 +31,25 @@ def getClosureData(selected_match):
                 "bet-result": bet_result
             })
 
-        # Construct the JSON
-        match_data = {
-            "match-id": str(selected_match.match_id),
-            "match-end": current_time,
-            "bets": bets_list
-        }
 
-        json_data = json.dumps(match_data)
-        return json_data
+        # Construct the JSON
+        if bets_list:
+            match_data = {
+                "match-id": str(selected_match.match_id),
+                "match-end": current_time,
+                "bets": bets_list
+                }            
+            json_data = json.dumps(match_data)
+            print(json_data)
+            return json_data
+        
+        else: 
+            match_data = {
+                "match-id": str(selected_match.match_id),
+                "match-end": current_time
+                }
+            json_data = json.dumps(match_data)
+            print(json_data)
+            return json_data
+
 
