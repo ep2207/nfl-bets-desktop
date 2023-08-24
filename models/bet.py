@@ -11,7 +11,7 @@ class Bet:
     def __str__(self):
         return f"Bet ID {self.bet_id} on {self.team_bet_on}: Amount {self.bet_amount} $, Result {self.bet_result} $"
 
-    def calculate_gain(self, visiting_team_quote, receiving_team_quote):
+    def calculate_gain(self, visiting_team_quote, receiving_team_quote):  # FIX ME ADD SCORE //////////////////////////////
         if self.team_bet_on == "visiting_team":
             odds = receiving_team_quote / visiting_team_quote
         else:

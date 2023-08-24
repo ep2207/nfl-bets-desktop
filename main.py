@@ -58,7 +58,7 @@ def on_match_select(event):
     
     # Add bets from the selected match to bets_listbox
     if receiving_team_bets:
-        for bet in selected_match.bets:
+        for bet in receiving_team_bets: 
             receiving_team_bets_listbox.insert(tk.END, str(bet))  
     else:
         receiving_team_bets_listbox.insert(tk.END, "No bets available for the selected match.")
@@ -125,7 +125,11 @@ def add_commentary():
             time.sleep(3) # wait for server interaction
             matches =allMatches(); #refresh matches 
         
-
+def refresh_matches():
+    matches = allMatches()  # Refresh matches
+    match_listbox.delete(0, tk.END)  # Clear current matches
+    for match in matches:  # Populate matches
+        match_listbox.insert(tk.END, str(match))
 
 
 
@@ -163,9 +167,11 @@ logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
 logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
 
 # Display the text label, also inside the horizontal frame.
-username_label = ttk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
-username_label.pack(side=tk.LEFT, padx=10)
+welcome_label = ttk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
+welcome_label.pack(side=tk.LEFT, padx=10)
 
+refresh_button = ttk.Button(horizontal_frame, text="Refresh", command=refresh_matches)
+refresh_button.pack(side=tk.RIGHT, padx=10) 
 
 # Main Window
 pane = PanedWindow(root, orient=tk.HORIZONTAL, height=1000)  # Change to HORIZONTAL
