@@ -26,14 +26,36 @@ def on_match_select(event):
     selected_index = match_listbox.curselection()[0] # 
     selected_match = matches[selected_index]
 
-    visiting_team_label.config(text=selected_match.visiting_team_name)
+    # Conditionally show score label or close button and score modification entry
+    if selected_match.match_is_closed:
+        
+        close_button.pack_forget()  # Hide close button
+        comment_entry.pack_forget()  # Hide comment entry
+        comment_button.pack_forget()  # Hide comment button
+        score_label.config(text=f"Final Score: {selected_match.score}")
+        score_label.pack(pady=5)
+        visiting_team_score_label.pack_forget()
+        visiting_team_score_entry.pack_forget() 
+        receiving_team_score_label.pack_forget() 
+        receiving_team_score_entry.pack_forget() 
 
-    # You can do similar updates for other labels/details you wish to show
+    else:
+        score_label.pack_forget()  # Hide score label
+        close_button.pack(pady=10)  # Show close button
+        comment_entry.pack(pady=10)  # Show comment entry
+        comment_button.pack(pady=10)  # Show comment button
+        visiting_team_score_label.pack(pady=5)
+        visiting_team_score_label.config(text=f"Score of {selected_match.visiting_team_name}:")
+        visiting_team_score_entry.pack(pady=5) 
+        receiving_team_score_label.pack(pady=5)
+        receiving_team_score_label.config(text=f"Score of {selected_match.receiving_team_name}:")
+        receiving_team_score_entry.pack(pady=5)
+
+
+    visiting_team_label.config(text=selected_match.visiting_team_name)
     receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
-
     score_label.config(text = f"current score: {selected_match.score}")
-    
     bets_vis_list_label.config(text = f"bets on: {selected_match.visiting_team_name}")
     bets_rec_list_label.config(text = f"bets on: {selected_match.receiving_team_name}")
 
@@ -65,10 +87,29 @@ def on_match_select(event):
     
     bets_rec_sum_label.config(text = f"sum of bets on {selected_match.receiving_team_name}: {total_bet_amount(receiving_team_bets)}  $") 
 
+    try:
+        if ":" in selected_match.score:
+            visiting_team_score, receiving_team_score = selected_match.score.split(":")
+        else:
+            print(f"Invalid score format: {selected_match.score}")
+            visiting_team_score, receiving_team_score = None, None
     
+    except ValueError:
+        print(f"Invalid score format: {selected_match.score}")
+        visiting_team_score, receiving_team_score = None, None
+
+
+    visiting_team_score_entry.delete(0, tk.END)
+    visiting_team_score_entry.insert(0, visiting_team_score)
+    receiving_team_score_entry.delete(0, tk.END)
+    receiving_team_score_entry.insert(0, receiving_team_score)
+
+
     commentaries_listbox.delete(0, tk.END)
     for commentary in selected_match.match_commentaries:
         commentaries_listbox.insert(tk.END, commentary)
+
+
 
 def get_selected_match():
     selected_index = match_listbox.curselection()
@@ -92,6 +133,21 @@ def close_match():
         if not selected_match:
             messagebox.showwarning("Warning", "No match is selected! First select a match")
             return
+        
+        
+        # Retrieve scores
+        visiting_team_score = visiting_team_score_entry.get()
+        receiving_team_score = receiving_team_score_entry.get()
+
+        if not (visiting_team_score.isdigit() and receiving_team_score.isdigit()):
+            messagebox.showwarning("Invalid Score", "Please provide valid numeric scores for both teams.")
+            return
+
+        # Update the score in the format "visiting_team_score:receiving_team_score"
+        selected_match.score = f"{visiting_team_score}:{receiving_team_score}"
+
+        visiting_team_score_entry.delete(0, 'end')
+        receiving_team_score_entry.delete(0, 'end')
 
         matchAndBetsData = json.loads(getClosureData(selected_match))
         closeMatch(matchAndBetsData)
@@ -173,6 +229,9 @@ welcome_label.pack(side=tk.LEFT, padx=10)
 refresh_button = ttk.Button(horizontal_frame, text="Refresh", command=refresh_matches)
 refresh_button.pack(side=tk.RIGHT, padx=10) 
 
+
+
+
 # Main Window
 pane = PanedWindow(root, orient=tk.HORIZONTAL, height=1000)  # Change to HORIZONTAL
 pane.pack(fill=tk.BOTH, expand=1)
@@ -191,8 +250,6 @@ match_listbox.bind('<<ListboxSelect>>', on_match_select)
 match_listbox.pack(fill=tk.BOTH, expand=1)
 
 scrollbar.config(command=match_listbox.yview, bg=colors["primary"])
-
-
 
 
 # Match details panel
@@ -217,11 +274,49 @@ time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["pri
 time_label.pack(pady=5)
 
 
-close_button = ttk.Button(details_frame, text="Close Match", command=close_match)
+
+# Horizontal score frame
+score_frame = tk.Frame(details_frame, bg=colors['primary'])
+score_frame.pack(pady=5, fill=tk.X)
+
+# Score label and entry for visiting team
+visiting_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+visiting_team_score_label.pack(side=tk.LEFT, padx=10)
+validate_cmd = score_frame.register(lambda value: value.isdigit() or value == "")
+visiting_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
+visiting_team_score_entry.pack(side=tk.LEFT)
+
+# Score label and entry for receiving team
+receiving_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+receiving_team_score_label.pack(side=tk.RIGHT, padx=10)
+receiving_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
+receiving_team_score_entry.pack(side=tk.RIGHT)
+
+close_button = ttk.Button(score_frame, text="Close Match", command=close_match)
 close_button.pack(pady=10)
+
+
+# Input for placing comments
+
+# Horizontal score frame
+comment_frame = tk.Frame(details_frame, bg=colors['primary'])
+comment_frame.pack(pady=5, fill=tk.X)
+
+comment_entry = ttk.Entry(comment_frame, width=70, foreground=colors["primary"],font=("Myriad pro",10))
+comment_entry.pack(pady=10)
+
+comment_button = ttk.Button(comment_frame, text="Add Comment", command=add_commentary)
+comment_button.pack(pady=10)
+
+
+commentaries_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
+                        width=30, height=3, font=("Myriad pro", 10))
+commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
 score_label.pack(pady=5)
+
+
 
 bets_vis_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
 bets_vis_list_label.pack(pady=5)
@@ -243,17 +338,6 @@ receiving_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 bets_rec_sum_label = ttk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_rec_sum_label.pack(pady=5)
 
-# Input for placing comments
-comment_entry = ttk.Entry(details_frame, width=70, foreground=colors["primary"],font=("Myriad pro",10))
-comment_entry.pack(pady=10)
-
-comment_button = ttk.Button(details_frame, text="Add Comment", command=add_commentary)
-comment_button.pack(pady=10)
-
-
-commentaries_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
-                        width=30, height=3, font=("Myriad pro", 10))
-commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 
 

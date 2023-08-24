@@ -31,7 +31,7 @@ class Match:
         return f"{status} - {self.match_date} Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name}"
 
     def is_live(self):
-        # Assuming match_date, match_kickoff, and match_end are in the format 'YYYY-MM-DD HH:MM'
+       
         match_date = datetime.strptime(self.match_date, '%Y-%m-%d').date()
         kickoff_time = datetime.strptime(f"{self.match_date} {self.match_kickoff}", '%Y-%m-%d %H:%M:%S')
         end_time = datetime.strptime(f"{self.match_date} {self.match_end}", '%Y-%m-%d %H:%M:%S')

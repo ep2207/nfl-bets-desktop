@@ -16,6 +16,7 @@ def getMatches():
     print (response.status_code)
     if response.status_code == 200:
         
+        print(response.json())
         return response.json()
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
@@ -37,6 +38,7 @@ def postCommentary(match_id, commentary):
     if response.status_code == 200:
         messagebox.showwarning("Success", "Commentary posted! swap matches to see your comment appear.")
 
+        print(response.json())
         return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
@@ -56,6 +58,7 @@ def closeMatch(matchAndBetsData):
     print (response.status_code)
     if response.status_code == 200:
         
+        print(response.json())
         return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
