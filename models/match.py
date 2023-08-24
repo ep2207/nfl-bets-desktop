@@ -13,7 +13,7 @@ class Match:
         self.match_date = data['match-date']
         self.match_kickoff = data['match-kickoff']
         self.match_end = data['match-end']
-        self.match_is_closed=data['is_closed']
+        self.match_is_closed=data['is-closed']
         self.score = data['score']
         self.match_weather_forecast = data['match-weather-forecast']
         self.match_commentaries = data['match-commentaries']
