@@ -93,7 +93,8 @@ def close_match():
             messagebox.showwarning("Warning", "No match is selected! First select a match")
             return
 
-        closeMatch(getClosureData(selected_match))
+        matchAndBetsData = json.loads(getClosureData(selected_match))
+        closeMatch(matchAndBetsData)
 
         time.sleep(3) # wait for server interaction
         matches =allMatches(); #refresh matches 

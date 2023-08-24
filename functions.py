@@ -39,8 +39,8 @@ def getClosureData(selected_match):
                 "match-end": current_time,
                 "bets": bets_list
                 }            
-            json_data = json.dumps(match_data)
-            print(json_data)
+            json_data = json.dumps(match_data) 
+            print(json_data) # DEBUG //////////////////////////////
             return json_data
         
         else: 
@@ -49,7 +49,7 @@ def getClosureData(selected_match):
                 "match-end": current_time
                 }
             json_data = json.dumps(match_data)
-            print(json_data)
+            print(json_data)# DEBUG //////////////////////////////
             return json_data
 
 

@@ -10,13 +10,12 @@ def getMatches():
     url = "https://nflbets-51ac322b191f.herokuapp.com/matches-d"
 
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, data=json.dumps(data), headers=headers, verify=False)
+    response = requests.post(url, data=json.dumps(data), headers=headers, verify=True)
 
     
     print (response.status_code)
     if response.status_code == 200:
         
-        print(response.json())
         return response.json()
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
@@ -31,14 +30,13 @@ def postCommentary(match_id, commentary):
     url = "https://nflbets-51ac322b191f.herokuapp.com/commentary-d"
 
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, data=json.dumps(data), headers=headers, verify=False)
+    response = requests.post(url, data=json.dumps(data), headers=headers, verify=True)
 
     
     print (response.status_code)
     if response.status_code == 200:
         messagebox.showwarning("Success", "Commentary posted! swap matches to see your comment appear.")
 
-        print(response.json())
         return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
@@ -52,13 +50,12 @@ def closeMatch(matchAndBetsData):
     url = "https://nflbets-51ac322b191f.herokuapp.com/close-match-d"
 
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, data=json.dumps(data), headers=headers, verify=False)
+    response = requests.post(url, data=json.dumps(data), headers=headers, verify=True)
 
     
     print (response.status_code)
     if response.status_code == 200:
         
-        print(response.json())
         return response.json() 
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
