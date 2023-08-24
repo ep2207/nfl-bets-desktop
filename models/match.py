@@ -26,9 +26,28 @@ class Match:
             self.bets = [Bet(bet_data) for bet_data in bets_data]
 
 
+    def is_future(self):
+        match_date = datetime.strptime(self.match_date, '%Y-%m-%d').date()
+        current_date = datetime.now().date()
+
+        return match_date > current_date
+
     def __str__(self):
         status = "CLOSED" if self.match_is_closed == 1 else "OPEN"
-        return f"{status} - {self.match_date} Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name}"
+        match_label = f"{status} - {self.match_date} Match {self.match_id}: {self.visiting_team_name} vs {self.receiving_team_name}"
+
+        # Check if the match is in the future
+        if self.is_future():
+            return f"IN THE FUTURE - {match_label}"
+
+        # Check if the match is today and has not started yet
+        kickoff_time = datetime.strptime(f"{self.match_date} {self.match_kickoff}", '%Y-%m-%d %H:%M:%S')
+        current_time = datetime.now()
+
+        if kickoff_time > current_time:
+            return f"TODAY - {match_label}"
+
+        return match_label
 
     def is_live(self):
        

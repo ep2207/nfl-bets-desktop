@@ -100,9 +100,7 @@ def on_match_select(event):
 
 
     visiting_team_score_entry.delete(0, tk.END)
-    visiting_team_score_entry.insert(0, visiting_team_score)
     receiving_team_score_entry.delete(0, tk.END)
-    receiving_team_score_entry.insert(0, receiving_team_score)
 
 
     commentaries_listbox.delete(0, tk.END)
