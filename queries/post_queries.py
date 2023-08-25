@@ -1,7 +1,7 @@
 from tkinter import messagebox
 import requests
 import json
-from functions import sanitizeInput
+from utils.functions import sanitizeInput
 
 
 def getMatches():
@@ -16,7 +16,6 @@ def getMatches():
     print (response.status_code)
     if response.status_code == 200:
         
-        print(response.json())
         return response.json()
     else:
         print(f"Failed to post data. Status code: {response.status_code}")

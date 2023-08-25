@@ -1,19 +1,16 @@
-# Create styles for ttk widgets
 import datetime as dt
-
-
-import json
-import re
+from html_sanitizer import Sanitizer
+import json 
 
 
 def sanitizeInput(input_text):
     # 1. Strip away leading or trailing whitespaces
-    sanitized_text = input_text.strip()
-    
-    # 2. Remove potentially harmful characters
-    sanitized_text = re.sub(r'[^a-zA-Z0-9.,!?;: \-]', '', sanitized_text)
+    sanitizer = Sanitizer()
 
-    return sanitized_text
+    # Clean the text
+    sanitized_text = sanitizer.sanitize(input_text)
+
+    return sanitized_text.strip()
 
 
 def getClosureData(selected_match):
@@ -25,7 +22,7 @@ def getClosureData(selected_match):
 
         # Calculate bet results and populate the bets list
 
-        # DEBUG //////////////////////////////
+
         bets_list = []
         for bet in selected_match.bets:
             bet.bet_result = bet.calculate_gain(selected_match.visiting_team_name,selected_match.receiving_team_name,
@@ -36,7 +33,6 @@ def getClosureData(selected_match):
                 "bet-result": bet.bet_result
             })
 
-        print(json.dumps(bets_list)) # DEBUG //////////////////////////////
         # Construct the JSON
         if bets_list:
             match_data = {
@@ -46,7 +42,6 @@ def getClosureData(selected_match):
                 "bets": bets_list
                 }            
             json_data = json.dumps(match_data) 
-            print(json_data) # DEBUG //////////////////////////////
             return json_data
         
         else: 
@@ -55,7 +50,6 @@ def getClosureData(selected_match):
                 "match-end": current_time
                 }
             json_data = json.dumps(match_data)
-            print(json_data)# DEBUG //////////////////////////////
             return json_data
 
 
