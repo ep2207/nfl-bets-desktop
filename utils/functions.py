@@ -1,15 +1,15 @@
 import datetime as dt
-from html_sanitizer import Sanitizer
+import sys
+sys.path.append("C:\\Users\\ep211.000\\.conda\\envs\\nflbets\\lib\\site-packages")
+
+from html_sanitizer.sanitizer import Sanitizer
 import json 
 
 
 def sanitizeInput(input_text):
-    # 1. Strip away leading or trailing whitespaces
     sanitizer = Sanitizer()
-
     # Clean the text
     sanitized_text = sanitizer.sanitize(input_text)
-
     return sanitized_text.strip()
 
 
