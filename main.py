@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
-from functions import getClosureData
+from utils.functions import getClosureData
 import time
 
 
@@ -88,14 +88,12 @@ def on_match_select(event):
     bets_rec_sum_label.config(text = f"sum of bets on {selected_match.receiving_team_name}: {total_bet_amount(receiving_team_bets)}  $") 
 
     try:
-        if ":" in selected_match.score:
+        if selected_match.score and ":" in selected_match.score:
             visiting_team_score, receiving_team_score = selected_match.score.split(":")
         else:
-            print(f"Invalid score format: {selected_match.score}")
             visiting_team_score, receiving_team_score = None, None
     
     except ValueError:
-        print(f"Invalid score format: {selected_match.score}")
         visiting_team_score, receiving_team_score = None, None
 
 
@@ -272,6 +270,9 @@ time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["pri
 time_label.pack(pady=5)
 
 
+score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
+score_label.pack(pady=5)
+
 
 # Horizontal score frame
 score_frame = tk.Frame(details_frame, bg=colors['primary'])
@@ -310,9 +311,6 @@ comment_button.pack(pady=10)
 commentaries_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
                         width=30, height=3, font=("Myriad pro", 10))
 commentaries_listbox.pack(fill=tk.BOTH, expand=1)
-
-score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
-score_label.pack(pady=5)
 
 
 
