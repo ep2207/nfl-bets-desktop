@@ -1,15 +1,11 @@
 import datetime as dt
-import sys
-sys.path.append("C:\\Users\\ep211.000\\.conda\\envs\\nflbets\\lib\\site-packages")
-
-from html_sanitizer.sanitizer import Sanitizer
+import html
 import json 
 
 
 def sanitizeInput(input_text):
-    sanitizer = Sanitizer()
     # Clean the text
-    sanitized_text = sanitizer.sanitize(input_text)
+    sanitized_text = html.escape(input_text)
     return sanitized_text.strip()
 
 

@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
-from utils.functions import getClosureData
+from utils.functions import getClosureData,sanitizeInput
 import time
 
 
@@ -168,12 +168,15 @@ def add_commentary():
          # Retrieve commentary from Entry widget
         commentary_text = comment_entry.get()
 
+
         if not commentary_text:
             messagebox.showwarning("Warning", "Please enter a commentary before posting!")
             return
         
+
         else:
-            postCommentary(selected_match.match_id,commentary_text)
+            clean_Commentary=sanitizeInput(commentary_text)
+            postCommentary(selected_match.match_id,clean_Commentary)
             time.sleep(3) # wait for server interaction
             matches =allMatches(); #refresh matches 
         
