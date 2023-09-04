@@ -47,7 +47,8 @@ def getClosureData(selected_match):
         else: 
             match_data = {
                 "match-id": str(selected_match.match_id),
-                "match-end": current_time
+                "match-end": current_time,
+                "score":str(selected_match.score)
                 }
             json_data = json.dumps(match_data)
             return json_data

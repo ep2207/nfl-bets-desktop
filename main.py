@@ -143,7 +143,7 @@ def close_match():
 
         visiting_team_score_entry.delete(0, 'end')
         receiving_team_score_entry.delete(0, 'end')
-
+        
         matchAndBetsData = json.loads(getClosureData(selected_match))
         closeMatch(matchAndBetsData)
 
