@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk, Listbox, Scrollbar, PanedWindow
 from tkinter import messagebox
 import tkinter.font as tkFont
-from PIL import Image, ImageTk
+#from PIL import Image, ImageTk
 from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
@@ -197,29 +197,29 @@ custom_font = ('Myriad Pro', 20)
 
 # import file image 
 
-image_path = "assets/logo/logo-horizontal.png"
-raw_image = Image.open(image_path)
-logo_image = ImageTk.PhotoImage(raw_image)
+#image_path = "assets/logo/logo-horizontal.png"
+#raw_image = Image.open(image_path)
+#logo_image = ImageTk.PhotoImage(raw_image)
 
-desired_width = 100  # Change as per your requirements
-aspect_ratio = raw_image.height / raw_image.width
-desired_height = int(desired_width * aspect_ratio)
+#desired_width = 100  # Change as per your requirements
+#aspect_ratio = raw_image.height / raw_image.width
+#desired_height = int(desired_width * aspect_ratio)
 
-resized_image = raw_image.resize((desired_width, desired_height))
+#resized_image = raw_image.resize((desired_width, desired_height))
 
 # Convert the resized image for tkinter
-logo_image = ImageTk.PhotoImage(resized_image)
+#logo_image = ImageTk.PhotoImage(resized_image)
 
 # Display the image in a label
 horizontal_frame = tk.Frame(root, bg=colors['primary'])
 horizontal_frame.pack(pady=10)
 
 # Display the image in a label, inside the horizontal frame.
-logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
-logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
+#logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
+#logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
 
 # Display the text label, also inside the horizontal frame.
-welcome_label = ttk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
+welcome_label = tk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
 welcome_label.pack(side=tk.LEFT, padx=10)
 
 refresh_button = ttk.Button(horizontal_frame, text="Refresh", command=refresh_matches)
@@ -255,22 +255,22 @@ pane.add(details_frame)
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
 
-visiting_team_label = ttk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["secondary"],)
+visiting_team_label = tk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["secondary"],)
 visiting_team_label.pack(pady=5)
 
 
-vs_label = ttk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["secondary"],)
+vs_label = tk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["secondary"],)
 vs_label.pack(pady=5)
 
-receiving_team_label = ttk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["secondary"],)
+receiving_team_label = tk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["secondary"],)
 receiving_team_label.pack(pady=5)
 
 
-time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
+time_label = tk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
 time_label.pack(pady=5)
 
 
-score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
+score_label = tk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
 score_label.pack(pady=5)
 
 
@@ -279,14 +279,14 @@ score_frame = tk.Frame(details_frame, bg=colors['primary'])
 score_frame.pack(pady=5, fill=tk.X)
 
 # Score label and entry for visiting team
-visiting_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+visiting_team_score_label = tk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
 visiting_team_score_label.pack(side=tk.LEFT, padx=10)
 validate_cmd = score_frame.register(lambda value: value.isdigit() or value == "")
 visiting_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
 visiting_team_score_entry.pack(side=tk.LEFT)
 
 # Score label and entry for receiving team
-receiving_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+receiving_team_score_label = tk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
 receiving_team_score_label.pack(side=tk.RIGHT, padx=10)
 receiving_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
 receiving_team_score_entry.pack(side=tk.RIGHT)
@@ -314,24 +314,24 @@ commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 
 
-bets_vis_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_vis_list_label = tk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
 bets_vis_list_label.pack(pady=5)
 
 visiting_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
                         width=70, height=3, font=("Myriad pro", 10))
 visiting_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
-bets_vis_sum_label = ttk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_vis_sum_label = tk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_vis_sum_label.pack(pady=5)
 
-bets_rec_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_rec_list_label = tk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
 bets_rec_list_label.pack(pady=5)
 
 receiving_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
                         width=70, height=3, font=("Myriad pro", 10))
 receiving_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
-bets_rec_sum_label = ttk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_rec_sum_label = tk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_rec_sum_label.pack(pady=5)
 
 

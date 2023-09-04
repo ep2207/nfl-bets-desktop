@@ -1,16 +1,16 @@
 import datetime as dt
-from html_sanitizer import Sanitizer
+#from html_sanitizer import Sanitizer
 import json 
 
 
 def sanitizeInput(input_text):
     # 1. Strip away leading or trailing whitespaces
-    sanitizer = Sanitizer()
+ #   sanitizer = Sanicondatizer()
 
     # Clean the text
-    sanitized_text = sanitizer.sanitize(input_text)
+    #sanitized_text = sanitizer.sanitize(input_text)
 
-    return sanitized_text.strip()
+    return input_text.strip()
 
 
 def getClosureData(selected_match):
