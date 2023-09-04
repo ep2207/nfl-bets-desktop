@@ -52,10 +52,9 @@ def on_match_select(event):
         receiving_team_score_entry.pack(pady=5)
 
 
-    visiting_team_label.config(text=selected_match.visiting_team_name)
-    receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
+  
+    teams_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
-    score_label.config(text = f"current score: {selected_match.score}")
     bets_vis_list_label.config(text = f"bets on: {selected_match.visiting_team_name}")
     bets_rec_list_label.config(text = f"bets on: {selected_match.receiving_team_name}")
 
@@ -254,29 +253,22 @@ pane.add(details_frame)
 
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
-
-visiting_team_label = tk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["secondary"],)
-visiting_team_label.pack(pady=5)
-
-
-vs_label = tk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["secondary"],)
-vs_label.pack(pady=5)
-
-receiving_team_label = tk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["secondary"],)
-receiving_team_label.pack(pady=5)
+teams_label = tk.Label(details_frame, text="visiting team vs receiving team ", background=colors["primary"], foreground=colors["secondary"],)
+teams_label.pack(pady=5)
 
 
 time_label = tk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
 time_label.pack(pady=5)
 
 
-score_label = tk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
-score_label.pack(pady=5)
-
-
 # Horizontal score frame
 score_frame = tk.Frame(details_frame, bg=colors['primary'])
 score_frame.pack(pady=5, fill=tk.X)
+
+
+score_label = tk.Label(score_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
+score_label.pack(pady=5)
+
 
 # Score label and entry for visiting team
 visiting_team_score_label = tk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])

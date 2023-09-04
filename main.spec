@@ -6,10 +6,10 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['./'],
+    pathex=['/utils', '/models', '/queries'],
     binaries=[],
     datas=[],
-    hiddenimports=[],
+    hiddenimports=['PIL', 'html_sanitizer'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
