@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
-from utils.functions import getClosureData
+from utils.functions import getClosureData,sanitizeInput
 import time
 
 
@@ -32,6 +32,7 @@ def on_match_select(event):
         close_button.pack_forget()  # Hide close button
         comment_entry.pack_forget()  # Hide comment entry
         comment_button.pack_forget()  # Hide comment button
+        score_frame.pack()
         score_label.config(text=f"Final Score: {selected_match.score}")
         score_label.pack(pady=5)
         visiting_team_score_label.pack_forget()
@@ -52,10 +53,8 @@ def on_match_select(event):
         receiving_team_score_entry.pack(pady=5)
 
 
-    visiting_team_label.config(text=selected_match.visiting_team_name)
-    receiving_team_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
+    teams_label.config(text=f"{selected_match.visiting_team_name} vs {selected_match.receiving_team_name}")
     time_label.config(text=f"{selected_match.match_kickoff} to {selected_match.match_end}")
-    score_label.config(text = f"current score: {selected_match.score}")
     bets_vis_list_label.config(text = f"bets on: {selected_match.visiting_team_name}")
     bets_rec_list_label.config(text = f"bets on: {selected_match.receiving_team_name}")
 
@@ -168,12 +167,15 @@ def add_commentary():
          # Retrieve commentary from Entry widget
         commentary_text = comment_entry.get()
 
+
         if not commentary_text:
             messagebox.showwarning("Warning", "Please enter a commentary before posting!")
             return
         
+
         else:
-            postCommentary(selected_match.match_id,commentary_text)
+            clean_Commentary=sanitizeInput(commentary_text)
+            postCommentary(selected_match.match_id,clean_Commentary)
             time.sleep(3) # wait for server interaction
             matches =allMatches(); #refresh matches 
         
@@ -219,7 +221,7 @@ logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
 logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
 
 # Display the text label, also inside the horizontal frame.
-welcome_label = ttk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
+welcome_label = tk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
 welcome_label.pack(side=tk.LEFT, padx=10)
 
 refresh_button = ttk.Button(horizontal_frame, text="Refresh", command=refresh_matches)
@@ -255,38 +257,30 @@ pane.add(details_frame)
 # Set a minimum width of 500 for the details_frame
 pane.paneconfigure(details_frame, minsize=500)
 
-visiting_team_label = ttk.Label(details_frame, text="visiting team", background=colors["primary"], foreground=colors["secondary"],)
-visiting_team_label.pack(pady=5)
+teams_label = tk.Label(details_frame, text="teams", background=colors["primary"], foreground=colors["secondary"],)
+teams_label.pack(pady=5)
 
 
-vs_label = ttk.Label(details_frame, text="vs", background=colors["primary"], foreground=colors["secondary"],)
-vs_label.pack(pady=5)
-
-receiving_team_label = ttk.Label(details_frame, text="receiving team ", background=colors["primary"], foreground=colors["secondary"],)
-receiving_team_label.pack(pady=5)
-
-
-time_label = ttk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
+time_label = tk.Label(details_frame, text="kickoff-end", background=colors["primary"], foreground=colors["secondary"],)
 time_label.pack(pady=5)
-
-
-score_label = ttk.Label(details_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
-score_label.pack(pady=5)
 
 
 # Horizontal score frame
 score_frame = tk.Frame(details_frame, bg=colors['primary'])
 score_frame.pack(pady=5, fill=tk.X)
 
+score_label = tk.Label(score_frame, text="score", background=colors["primary"], foreground=colors["secondary"],)
+score_label.pack(pady=5)
+
 # Score label and entry for visiting team
-visiting_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+visiting_team_score_label = tk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
 visiting_team_score_label.pack(side=tk.LEFT, padx=10)
 validate_cmd = score_frame.register(lambda value: value.isdigit() or value == "")
 visiting_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
 visiting_team_score_entry.pack(side=tk.LEFT)
 
 # Score label and entry for receiving team
-receiving_team_score_label = ttk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
+receiving_team_score_label = tk.Label(score_frame, text=f"Score", background=colors["primary"], foreground=colors["secondary"])
 receiving_team_score_label.pack(side=tk.RIGHT, padx=10)
 receiving_team_score_entry = ttk.Entry(score_frame, validate="key", validatecommand=(validate_cmd, '%P'), width=5)
 receiving_team_score_entry.pack(side=tk.RIGHT)
@@ -304,7 +298,7 @@ comment_frame.pack(pady=5, fill=tk.X)
 comment_entry = ttk.Entry(comment_frame, width=70, foreground=colors["primary"],font=("Myriad pro",10))
 comment_entry.pack(pady=10)
 
-comment_button = ttk.Button(comment_frame, text="Add Comment", command=add_commentary)
+comment_button = tk.Button(comment_frame, text="Add Comment", command=add_commentary)
 comment_button.pack(pady=10)
 
 
@@ -314,24 +308,24 @@ commentaries_listbox.pack(fill=tk.BOTH, expand=1)
 
 
 
-bets_vis_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_vis_list_label = tk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
 bets_vis_list_label.pack(pady=5)
 
 visiting_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
                         width=70, height=3, font=("Myriad pro", 10))
 visiting_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
-bets_vis_sum_label = ttk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_vis_sum_label = tk.Label(details_frame, text="sum of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_vis_sum_label.pack(pady=5)
 
-bets_rec_list_label = ttk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
+bets_rec_list_label = tk.Label(details_frame, text="list of bets for visiting team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",12))
 bets_rec_list_label.pack(pady=5)
 
 receiving_team_bets_listbox = Listbox(details_frame, yscrollcommand=scrollbar.set, bg=colors["primary"], fg=colors["white"],
                         width=70, height=3, font=("Myriad pro", 10))
 receiving_team_bets_listbox.pack(fill=tk.BOTH, expand=1)
 
-bets_rec_sum_label = ttk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
+bets_rec_sum_label = tk.Label(details_frame, text="sum of bets for the receiving team", background=colors["primary"], foreground=colors["white"],font=("Myriad pro",10))
 bets_rec_sum_label.pack(pady=5)
 
 

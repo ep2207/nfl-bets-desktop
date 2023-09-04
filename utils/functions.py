@@ -1,15 +1,11 @@
 import datetime as dt
-from html_sanitizer import Sanitizer
+import html
 import json 
 
 
 def sanitizeInput(input_text):
-    # 1. Strip away leading or trailing whitespaces
-    sanitizer = Sanitizer()
-
     # Clean the text
-    sanitized_text = sanitizer.sanitize(input_text)
-
+    sanitized_text = html.escape(input_text)
     return sanitized_text.strip()
 
 

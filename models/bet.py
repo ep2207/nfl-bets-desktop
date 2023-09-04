@@ -18,9 +18,9 @@ class Bet:
         # Determine the actual winning team based on the scores
         if visiting_score > receiving_score:
             actual_winning_team = visiting_team
+
         elif receiving_score > visiting_score:
-            # Assuming you have both team's names, we find the one that's not the visiting team
-            actual_winning_team = receiving_team if self.team_bet_on != visiting_team else visiting_team
+            actual_winning_team = receiving_team
         else:  # It's a tie
             return 0  
 
@@ -33,7 +33,7 @@ class Bet:
             odds = receiving_team_quote / visiting_team_quote
         else:
             odds = visiting_team_quote / receiving_team_quote
-
+        
         return self.bet_amount * odds
 
 def separate_bets_by_team(match):
