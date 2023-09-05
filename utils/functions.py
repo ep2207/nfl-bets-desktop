@@ -1,16 +1,19 @@
 import datetime as dt
-#from html_sanitizer import Sanitizer
 import json 
 
 
 def sanitizeInput(input_text):
-    # 1. Strip away leading or trailing whitespaces
-    sanitizer = Sanicondatizer()
+    # Characters to remove
+    # You can expand this list based on your requirements
+    dangerous_chars = ['<', '>', ';', '&', '|', '$', '`', '!', '*']
 
-    # Clean the text
-    sanitized_text = sanitizer.sanitize(input_text)
+    # Remove dangerous characters
+    for char in dangerous_chars:
+        input_text = input_text.replace(char, '')
 
-    return sanitized_text.strip()
+    # Strip away leading or trailing whitespaces
+    return input_text.strip()
+
 
 
 def getClosureData(selected_match):
