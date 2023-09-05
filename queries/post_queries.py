@@ -19,6 +19,7 @@ def getMatches():
         return response.json()
     else:
         print(f"Failed to post data. Status code: {response.status_code}")
+        show_popup()
         return None
     
 
