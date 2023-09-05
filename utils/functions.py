@@ -5,12 +5,12 @@ import json
 
 def sanitizeInput(input_text):
     # 1. Strip away leading or trailing whitespaces
- #   sanitizer = Sanicondatizer()
+    sanitizer = Sanicondatizer()
 
     # Clean the text
-    #sanitized_text = sanitizer.sanitize(input_text)
+    sanitized_text = sanitizer.sanitize(input_text)
 
-    return input_text.strip()
+    return sanitized_text.strip()
 
 
 def getClosureData(selected_match):

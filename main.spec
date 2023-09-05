@@ -6,9 +6,9 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['/utils', '/models', '/queries'],
+    pathex=['/utils', '/assets/logo', '/models', '/queries'],
     binaries=[],
-    datas=[],
+    datas=[('logo-horizontal.png', '.')],
     hiddenimports=['PIL', 'html_sanitizer'],
     hookspath=[],
     hooksconfig={},

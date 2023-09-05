@@ -1,10 +1,12 @@
 import datetime
 import json
+import os
+import sys
 import tkinter as tk
 from tkinter import ttk, Listbox, Scrollbar, PanedWindow
 from tkinter import messagebox
 import tkinter.font as tkFont
-#from PIL import Image, ImageTk
+from PIL import Image, ImageTk
 from queries.post_queries import postCommentary, closeMatch
 from models.match import allMatches 
 from models.bet import  separate_bets_by_team,total_bet_amount
@@ -182,6 +184,14 @@ def refresh_matches():
     for match in matches:  # Populate matches
         match_listbox.insert(tk.END, str(match))
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 
 root = tk.Tk()
@@ -193,29 +203,35 @@ root.option_add('*Font', 'MyriadPro 14')
 custom_font = ('Myriad Pro', 20)
 
 
-
 # import file image 
+# Identify the base path
+if getattr(sys, 'frozen', False):
+    # If the application is run as a bundle/exe
+    base_path = sys._MEIPASS
+else:
+    base_path = os.path.dirname(__file__)
 
-#image_path = "assets/logo/logo-horizontal.png"
-#raw_image = Image.open(image_path)
-#logo_image = ImageTk.PhotoImage(raw_image)
+image_path = os.path.join(base_path, "logo-horizontal.png")
 
-#desired_width = 100  # Change as per your requirements
-#aspect_ratio = raw_image.height / raw_image.width
-#desired_height = int(desired_width * aspect_ratio)
+raw_image = Image.open(image_path)
+logo_image = ImageTk.PhotoImage(raw_image)
 
-#resized_image = raw_image.resize((desired_width, desired_height))
+desired_width = 100  # Change as per your requirements
+aspect_ratio = raw_image.height / raw_image.width
+desired_height = int(desired_width * aspect_ratio)
+
+resized_image = raw_image.resize((desired_width, desired_height))
 
 # Convert the resized image for tkinter
-#logo_image = ImageTk.PhotoImage(resized_image)
+logo_image = ImageTk.PhotoImage(resized_image)
 
 # Display the image in a label
 horizontal_frame = tk.Frame(root, bg=colors['primary'])
 horizontal_frame.pack(pady=10)
 
 # Display the image in a label, inside the horizontal frame.
-#logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
-#logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
+logo_label = tk.Label(horizontal_frame, image=logo_image, bg=colors['primary'])
+logo_label.pack(side=tk.LEFT, padx=10)  # Pack on the left side of the horizontal frame.
 
 # Display the text label, also inside the horizontal frame.
 welcome_label = tk.Label(horizontal_frame, text="Welcome to the admin app", background=colors["primary"], foreground=colors["white"], font=custom_font)
