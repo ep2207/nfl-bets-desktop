@@ -1,0 +1,3 @@
+([('main',
+   '/Users/edouardphilippe/Documents/repo/nfl-bets-desktop/nfl-bets-desktop/dist/main',
+   'EXECUTABLE')],)
